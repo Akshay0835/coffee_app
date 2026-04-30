@@ -1,6 +1,6 @@
 "use client";
 import { Variants } from "framer-motion";
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import CoffeeCanvas from "@/components/CoffeeCanvas";
@@ -45,6 +45,15 @@ const itemVariants: Variants = {
 };
 
 export default function Home() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   const experienceRef = useRef<HTMLElement>(null);
   const { scrollYProgress: experienceScrollY } = useScroll({
     target: experienceRef,
@@ -58,14 +67,28 @@ export default function Home() {
   const beatDOpacity = useTransform(experienceScrollY, [0.90, 0.95, 1, 1], [0, 1, 1, 1]);
 
   // Story scroll
-  const storyContainerRef = useRef<HTMLDivElement>(null);
+  const storyContainerRef = useRef<HTMLElement>(null);
   const { scrollYProgress: storyScrollY } = useScroll({
     target: storyContainerRef,
     offset: ["start end", "end start"]
   });
 
-  const storyY1 = useTransform(storyScrollY, [0, 1], [100, -100]);
-  const storyY2 = useTransform(storyScrollY, [0, 1], [-100, 100]);
+  // On mobile, elements stack vertically. Moving them in opposite directions causes collisions.
+  // We use subtle, same-direction transforms for mobile to create elegant float without overlap.
+  const storyY1 = useTransform(storyScrollY, [0, 1], isMobile ? [20, -20] : [150, -150]);
+  const storyY2 = useTransform(storyScrollY, [0, 1], isMobile ? [40, -40] : [-100, 100]);
+  const storyY3 = useTransform(storyScrollY, [0, 1], isMobile ? [20, -20] : [100, -100]);
+  const storyY4 = useTransform(storyScrollY, [0, 1], isMobile ? [40, -40] : [-150, 150]);
+
+  // Shop scroll
+  const shopContainerRef = useRef<HTMLElement>(null);
+  const { scrollYProgress: shopScrollY } = useScroll({
+    target: shopContainerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const shopY1 = useTransform(shopScrollY, [0, 1], isMobile ? [20, -20] : [100, -100]);
+  const shopY2 = useTransform(shopScrollY, [0, 1], isMobile ? [40, -40] : [-100, 100]);
 
   return (
     <main className="w-full bg-[#050505] overflow-x-clip">
@@ -138,7 +161,7 @@ export default function Home() {
       </section>
 
       {/* 2. STORY SECTION */}
-      <section id="story" className="relative z-20 w-full min-h-screen py-32 px-6 md:px-12 bg-[#050505]">
+      <section ref={storyContainerRef} id="story" className="relative z-20 w-full min-h-screen py-32 px-6 md:px-12 bg-[#050505]">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -151,7 +174,7 @@ export default function Home() {
               OUR STORY
             </h1>
 
-            <div ref={storyContainerRef} className="grid grid-cols-1 md:grid-cols-2 gap-16 mt-24 items-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mt-24 items-center">
               <motion.div style={{ y: storyY1 }}>
                 <h2 className="font-[family-name:var(--font-playfair)] text-3xl font-bold tracking-[0.1em] text-[#D4A373] mb-6">
                   THE SOURCE
@@ -173,14 +196,14 @@ export default function Home() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mt-32 items-center">
-              <div className="order-2 md:order-1 relative aspect-[4/3] border border-[#D4A373]/20 p-4">
+              <motion.div style={{ y: storyY4 }} className="order-2 md:order-1 relative aspect-[4/3] border border-[#D4A373]/20 p-4">
                 <div className="absolute inset-0 bg-[#050505] z-0" />
                 <div className="relative z-10 w-full h-full flex items-center justify-center bg-white/5 backdrop-blur-sm">
                   <span className="font-[family-name:var(--font-inter)] text-[#D4A373] tracking-[0.4em] uppercase text-xs">200°C Precision</span>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="order-1 md:order-2">
+              <motion.div style={{ y: storyY3 }} className="order-1 md:order-2">
                 <h2 className="font-[family-name:var(--font-playfair)] text-3xl font-bold tracking-[0.1em] text-white mb-6">
                   THE RITUAL
                 </h2>
@@ -190,7 +213,7 @@ export default function Home() {
                 <p className="font-[family-name:var(--font-inter)] text-stone-300 leading-relaxed text-sm">
                   The result is a cup of profound depth. A velvet crema that coats the palate. A moment of absolute silence in a noisy world.
                 </p>
-              </div>
+              </motion.div>
             </div>
 
             <div className="mt-40 text-center border-t border-white/5 pt-20 relative">
@@ -206,7 +229,7 @@ export default function Home() {
       </section>
 
       {/* 3. SHOP SECTION */}
-      <section id="shop" className="relative z-20 w-full min-h-screen py-32 px-6 md:px-12 bg-[#050505]">
+      <section ref={shopContainerRef} id="shop" className="relative z-20 w-full min-h-screen py-32 px-6 md:px-12 bg-[#050505]">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -230,36 +253,38 @@ export default function Home() {
             viewport={{ once: true, margin: "-100px" }}
             className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24 relative z-10"
           >
-            {products.map((product) => (
-              <motion.div key={product.id} variants={itemVariants} className="group cursor-pointer relative">
-                <div className="absolute inset-0 bg-gradient-to-b from-[#D4A373]/0 to-[#D4A373]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-3xl -z-10" />
-                <div className="relative aspect-[4/5] mb-8 bg-gradient-to-b from-[#0a0a0a] to-[#050505] border border-white/5 overflow-hidden transition-all duration-700 group-hover:border-[#D4A373]/30 rounded-sm shadow-2xl shadow-black/50">
-                  {/* Subtle hover glow */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#D4A373]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0" />
+            {products.map((product, index) => (
+              <motion.div key={product.id} variants={itemVariants}>
+                <motion.div style={{ y: index % 2 === 0 ? shopY1 : shopY2 }} className="group cursor-pointer relative">
+                  <div className="absolute inset-0 bg-gradient-to-b from-[#D4A373]/0 to-[#D4A373]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-3xl -z-10" />
+                  <div className="relative aspect-[4/5] mb-8 bg-gradient-to-b from-[#0a0a0a] to-[#050505] border border-white/5 overflow-hidden transition-all duration-700 group-hover:border-[#D4A373]/30 rounded-sm shadow-2xl shadow-black/50">
+                    {/* Subtle hover glow */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#D4A373]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0" />
 
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover scale-95 group-hover:scale-105 transition-transform duration-[1.5s] ease-[cubic-bezier(0.19_1_0.22_1)] z-10 drop-shadow-2xl"
-                    priority
-                  />
-                </div>
-
-                <div className="flex flex-col items-center text-center">
-                  <h2 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl font-bold tracking-[0.2em] mb-3 text-white group-hover:text-[#D4A373] transition-colors duration-500">
-                    {product.name}
-                  </h2>
-                  <div className="font-[family-name:var(--font-inter)] text-xs text-stone-500 uppercase tracking-widest space-y-2 mb-8">
-                    <p><span className="text-stone-700 mr-2">—</span>{product.origin}<span className="text-stone-700 ml-2">—</span></p>
-                    <p className="text-[#D4A373]/70">{product.notes}</p>
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover scale-95 group-hover:scale-105 transition-transform duration-[1.5s] ease-[cubic-bezier(0.19_1_0.22_1)] z-10 drop-shadow-2xl"
+                      priority
+                    />
                   </div>
-                  <button className="relative overflow-hidden group/btn px-10 py-4 border border-white/10 bg-white/5 backdrop-blur-md text-white font-[family-name:var(--font-inter)] text-xs uppercase tracking-[0.2em] transition-all duration-500 w-full md:w-auto">
-                    <span className="relative z-10 group-hover/btn:text-[#050505] transition-colors duration-500">Add to Cart — {product.price}</span>
-                    <div className="absolute inset-0 bg-[#D4A373] scale-x-0 origin-left group-hover/btn:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.19_1_0.22_1)] z-0" />
-                  </button>
-                </div>
+
+                  <div className="flex flex-col items-center text-center">
+                    <h2 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl font-bold tracking-[0.2em] mb-3 text-white group-hover:text-[#D4A373] transition-colors duration-500">
+                      {product.name}
+                    </h2>
+                    <div className="font-[family-name:var(--font-inter)] text-xs text-stone-500 uppercase tracking-widest space-y-2 mb-8">
+                      <p><span className="text-stone-700 mr-2">—</span>{product.origin}<span className="text-stone-700 ml-2">—</span></p>
+                      <p className="text-[#D4A373]/70">{product.notes}</p>
+                    </div>
+                    <button className="relative overflow-hidden group/btn px-10 py-4 border border-white/10 bg-white/5 backdrop-blur-md text-white font-[family-name:var(--font-inter)] text-xs uppercase tracking-[0.2em] transition-all duration-500 w-full md:w-auto">
+                      <span className="relative z-10 group-hover/btn:text-[#050505] transition-colors duration-500">Add to Cart — {product.price}</span>
+                      <div className="absolute inset-0 bg-[#D4A373] scale-x-0 origin-left group-hover/btn:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.19_1_0.22_1)] z-0" />
+                    </button>
+                  </div>
+                </motion.div>
               </motion.div>
             ))}
           </motion.div>
