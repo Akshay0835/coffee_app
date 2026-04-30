@@ -34,10 +34,10 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { y: 50, opacity: 0 },
-  visible: { 
-    y: 0, 
-    opacity: 1, 
-    transition: { duration: 0.8, ease: "easeOut" } 
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: { duration: 0.8, ease: "easeOut" }
   },
 };
 
@@ -75,9 +75,9 @@ export default function Home() {
 
         {/* Foreground Scrollytelling Beats */}
         <div className="sticky top-0 w-full h-screen z-10 flex flex-col items-center justify-center pointer-events-none">
-          
+
           {/* BEAT A: The Origin */}
-          <motion.div 
+          <motion.div
             style={{ opacity: beatAOpacity }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-6"
           >
@@ -90,7 +90,7 @@ export default function Home() {
           </motion.div>
 
           {/* BEAT B: The Extraction */}
-          <motion.div 
+          <motion.div
             style={{ opacity: beatBOpacity }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-6"
           >
@@ -103,7 +103,7 @@ export default function Home() {
           </motion.div>
 
           {/* BEAT C: The Texture */}
-          <motion.div 
+          <motion.div
             style={{ opacity: beatCOpacity }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-6"
           >
@@ -116,7 +116,7 @@ export default function Home() {
           </motion.div>
 
           {/* BEAT D: The Moment */}
-          <motion.div 
+          <motion.div
             style={{ opacity: beatDOpacity }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-gradient-to-t from-[#050505] to-transparent via-[#050505]/80"
           >
@@ -126,7 +126,7 @@ export default function Home() {
               </h2>
               <a href="#story" className="relative overflow-hidden group pointer-events-auto px-10 py-5 bg-white/5 border border-white/20 text-white font-[family-name:var(--font-inter)] tracking-[0.2em] text-sm uppercase transition-all duration-700 backdrop-blur-md">
                 <span className="relative z-10 group-hover:text-[#050505] transition-colors duration-500">Discover Our Story</span>
-                <div className="absolute inset-0 bg-[#D4A373] scale-y-0 origin-bottom group-hover:scale-y-100 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] z-0" />
+                <div className="absolute inset-0 bg-[#D4A373] scale-y-0 origin-bottom group-hover:scale-y-100 transition-transform duration-500 ease-[cubic-bezier(0.19_1_0.22_1)] z-0" />
               </a>
             </div>
           </motion.div>
@@ -195,7 +195,7 @@ export default function Home() {
               <h3 className="font-[family-name:var(--font-playfair)] text-5xl md:text-6xl text-white mb-10 tracking-wide">Ready to step into the dark?</h3>
               <a href="#shop" className="relative overflow-hidden group inline-block px-12 py-5 border border-[#D4A373]/30 text-[#D4A373] hover:border-[#D4A373] hover:text-[#050505] font-[family-name:var(--font-inter)] text-xs uppercase tracking-[0.2em] transition-all duration-700">
                 <span className="relative z-10">Explore the Collection</span>
-                <div className="absolute inset-0 bg-[#D4A373] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] z-0" />
+                <div className="absolute inset-0 bg-[#D4A373] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19_1_0.22_1)] z-0" />
               </a>
             </div>
           </motion.div>
@@ -233,17 +233,17 @@ export default function Home() {
                 <div className="relative aspect-[4/5] mb-8 bg-gradient-to-b from-[#0a0a0a] to-[#050505] border border-white/5 overflow-hidden transition-all duration-700 group-hover:border-[#D4A373]/30 rounded-sm shadow-2xl shadow-black/50">
                   {/* Subtle hover glow */}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#D4A373]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0" />
-                  
+
                   <Image
                     src={product.image}
                     alt={product.name}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover scale-95 group-hover:scale-105 transition-transform duration-[1.5s] ease-[cubic-bezier(0.19,1,0.22,1)] z-10 drop-shadow-2xl"
+                    className="object-cover scale-95 group-hover:scale-105 transition-transform duration-[1.5s] ease-[cubic-bezier(0.19_1_0.22_1)] z-10 drop-shadow-2xl"
                     priority
                   />
                 </div>
-                
+
                 <div className="flex flex-col items-center text-center">
                   <h2 className="font-[family-name:var(--font-playfair)] text-2xl md:text-3xl font-bold tracking-[0.2em] mb-3 text-white group-hover:text-[#D4A373] transition-colors duration-500">
                     {product.name}
@@ -254,7 +254,7 @@ export default function Home() {
                   </div>
                   <button className="relative overflow-hidden group/btn px-10 py-4 border border-white/10 bg-white/5 backdrop-blur-md text-white font-[family-name:var(--font-inter)] text-xs uppercase tracking-[0.2em] transition-all duration-500 w-full md:w-auto">
                     <span className="relative z-10 group-hover/btn:text-[#050505] transition-colors duration-500">Add to Cart — {product.price}</span>
-                    <div className="absolute inset-0 bg-[#D4A373] scale-x-0 origin-left group-hover/btn:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] z-0" />
+                    <div className="absolute inset-0 bg-[#D4A373] scale-x-0 origin-left group-hover/btn:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.19_1_0.22_1)] z-0" />
                   </button>
                 </div>
               </motion.div>
@@ -267,7 +267,7 @@ export default function Home() {
             <h3 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl text-white mb-10 tracking-wide">Seeking a private reserve?</h3>
             <a href="/contact" className="relative overflow-hidden group inline-block px-12 py-5 border border-[#D4A373]/30 text-[#D4A373] hover:border-[#D4A373] hover:text-[#050505] font-[family-name:var(--font-inter)] text-xs uppercase tracking-[0.2em] transition-all duration-700">
               <span className="relative z-10">Contact the Roastery</span>
-              <div className="absolute inset-0 bg-[#D4A373] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] z-0" />
+              <div className="absolute inset-0 bg-[#D4A373] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19_1_0.22_1)] z-0" />
             </a>
           </div>
         </div>

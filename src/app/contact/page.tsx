@@ -18,7 +18,7 @@ export default function ContactPage() {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const } },
   };
 
   return (
@@ -40,12 +40,12 @@ export default function ContactPage() {
               Get in Touch
             </span>
           </motion.div>
-          
+
           <motion.h1 variants={itemVariants} className="font-[family-name:var(--font-playfair)] text-5xl md:text-7xl font-bold mb-8 tracking-wide text-white leading-tight">
             REACH THE <br className="hidden md:block" />
             <span className="italic text-stone-400 font-light">VOID</span>
           </motion.h1>
-          
+
           <motion.p variants={itemVariants} className="font-[family-name:var(--font-inter)] text-stone-400 text-sm md:text-base leading-relaxed mb-12 max-w-md">
             Whether you seek a private tasting, a wholesale partnership, or simply wish to discuss the nuances of our latest roast, we invite your inquiry.
           </motion.p>
@@ -76,7 +76,7 @@ export default function ContactPage() {
                 </a>
               </div>
             </motion.div>
-            
+
             <motion.div variants={itemVariants} className="flex items-start group">
               <div className="mt-1 mr-6 text-stone-600 group-hover:text-[#D4A373] transition-colors duration-500">
                 <Phone strokeWidth={1.5} size={24} />
@@ -95,12 +95,12 @@ export default function ContactPage() {
         <motion.div variants={itemVariants} className="relative mt-8 lg:mt-0">
           {/* Glassmorphism card effect */}
           <div className="absolute inset-0 bg-white/[0.01] border border-white/[0.05] backdrop-blur-3xl -m-6 md:-m-12 p-6 md:p-12 z-0 hidden md:block" />
-          
+
           <form className="relative z-10 space-y-10" onSubmit={(e) => e.preventDefault()}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
               <div className="relative group">
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   id="name"
                   required
                   className="w-full bg-transparent border-b border-stone-800 py-3 text-white focus:outline-none focus:border-[#D4A373] transition-colors peer font-[family-name:var(--font-inter)] text-sm"
@@ -111,8 +111,8 @@ export default function ContactPage() {
                 </label>
               </div>
               <div className="relative group">
-                <input 
-                  type="email" 
+                <input
+                  type="email"
                   id="email"
                   required
                   className="w-full bg-transparent border-b border-stone-800 py-3 text-white focus:outline-none focus:border-[#D4A373] transition-colors peer font-[family-name:var(--font-inter)] text-sm"
@@ -125,8 +125,8 @@ export default function ContactPage() {
             </div>
 
             <div className="relative group">
-              <input 
-                type="text" 
+              <input
+                type="text"
                 id="subject"
                 required
                 className="w-full bg-transparent border-b border-stone-800 py-3 text-white focus:outline-none focus:border-[#D4A373] transition-colors peer font-[family-name:var(--font-inter)] text-sm"
@@ -138,7 +138,7 @@ export default function ContactPage() {
             </div>
 
             <div className="relative group">
-              <textarea 
+              <textarea
                 id="message"
                 required
                 rows={4}

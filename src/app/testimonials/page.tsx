@@ -48,10 +48,10 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { y: 40, opacity: 0 },
-  visible: { 
-    y: 0, 
-    opacity: 1, 
-    transition: { duration: 0.8, ease: "easeOut" } 
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: { duration: 0.8, ease: "easeOut" }
   },
 };
 
@@ -97,14 +97,14 @@ export default function TestimonialsPage() {
           <motion.div key={testimonial.id} variants={itemVariants} className={`group relative ${testimonial.span}`}>
             <div className="absolute inset-0 bg-gradient-to-br from-[#D4A373]/0 to-[#D4A373]/10 opacity-0 group-hover:opacity-100 transition-all duration-1000 blur-3xl -z-10 rounded-xl" />
             <div className="relative h-full p-10 md:p-14 bg-[#050505]/60 backdrop-blur-md border border-white/5 transition-all duration-700 group-hover:border-[#D4A373]/30 rounded-sm flex flex-col justify-between overflow-hidden">
-              
+
               {/* Corner Accent */}
               <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              
+
               <div className="absolute top-8 left-8 text-[#D4A373]/10 font-[family-name:var(--font-playfair)] text-8xl leading-none transition-transform duration-700 group-hover:-translate-y-2 group-hover:text-[#D4A373]/20">
                 "
               </div>
-              
+
               <div className="relative z-10 mb-12 mt-4">
                 <div className="flex mb-6">
                   {[...Array(testimonial.rating)].map((_, i) => (
@@ -115,7 +115,7 @@ export default function TestimonialsPage() {
                   {testimonial.quote}
                 </p>
               </div>
-              
+
               <div className="mt-auto border-t border-white/10 pt-8 flex items-center justify-between relative z-10">
                 <div>
                   <h3 className="font-[family-name:var(--font-inter)] text-sm tracking-[0.3em] text-white uppercase mb-2 group-hover:text-[#D4A373] transition-colors duration-500">
@@ -131,13 +131,13 @@ export default function TestimonialsPage() {
           </motion.div>
         ))}
       </motion.div>
-      
+
       <div className="mt-32 text-center border-t border-white/5 pt-20 relative">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-16 bg-gradient-to-b from-[#D4A373] to-transparent" />
         <h3 className="font-[family-name:var(--font-playfair)] text-4xl text-white mb-10 tracking-wide">Experience the darkness yourself.</h3>
         <a href="/#experience" className="relative overflow-hidden group inline-block px-12 py-5 border border-[#D4A373]/30 text-[#D4A373] hover:border-[#D4A373] hover:text-[#050505] font-[family-name:var(--font-inter)] text-xs uppercase tracking-[0.2em] transition-all duration-700">
           <span className="relative z-10">Return to the Origin</span>
-          <div className="absolute inset-0 bg-[#D4A373] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] z-0" />
+          <div className="absolute inset-0 bg-[#D4A373] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19_1_0.22_1)] z-0" />
         </a>
       </div>
     </main>
