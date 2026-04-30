@@ -34,7 +34,7 @@ export default function CoffeeCanvas({ scrollProgress }: CoffeeCanvasProps) {
     for (let i = 1; i <= TOTAL_FRAMES; i++) {
       imgArray.push(new Image());
     }
-    
+
     setImages(imgArray);
 
     const loadImages = async () => {
@@ -99,7 +99,7 @@ export default function CoffeeCanvas({ scrollProgress }: CoffeeCanvasProps) {
 
     const drawFrame = (index: number) => {
       let img = images[index];
-      
+
       // If target frame isn't loaded yet, find the closest previous loaded frame
       if (!img || !img.complete || img.naturalWidth === 0) {
         for (let i = index - 1; i >= 0; i--) {
@@ -117,8 +117,25 @@ export default function CoffeeCanvas({ scrollProgress }: CoffeeCanvasProps) {
 
       if (currentWidth === 0 || currentHeight === 0 || imgWidth === 0 || imgHeight === 0) return;
 
-      // Always use object-cover logic to completely fill the screen without letterboxing
-      const coverScale = Math.max(currentWidth / imgWidth, currentHeight / imgHeight);
+      const isMobile = currentWidth < 768;
+      let coverScale;
+
+      if (isMobile) {
+        // The user felt object-cover was too zoomed in, but the previous iteration left too much empty vertical space.
+        // We find the exact middle ground: scale it so the height covers exactly 85% of the screen height.
+        // This ensures it looks large and impressive, but doesn't excessively crop the sides.
+        const widthScale = currentWidth / imgWidth;
+        const heightScale = currentHeight / imgHeight;
+
+        const optimalScale = heightScale * 0.85;
+
+        // Ensure it NEVER gets smaller than the screen width to prevent vertical letterboxing
+        coverScale = Math.max(widthScale, optimalScale);
+      } else {
+        // Always use object-cover logic for desktop to completely fill the screen
+        coverScale = Math.max(currentWidth / imgWidth, currentHeight / imgHeight);
+      }
+
       const drawWidth = imgWidth * coverScale;
       const drawHeight = imgHeight * coverScale;
 
@@ -138,7 +155,7 @@ export default function CoffeeCanvas({ scrollProgress }: CoffeeCanvasProps) {
     resizeObserver.observe(container);
 
     let lastFrame = -1;
-    
+
     // Subscribe to frameIndex changes instead of running a continuous requestAnimationFrame loop
     const unsubscribe = frameIndex.on("change", (latest) => {
       const frame = Math.round(latest);
