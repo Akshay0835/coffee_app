@@ -20,35 +20,44 @@ export default function CoffeeCanvas({ scrollProgress }: CoffeeCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [images, setImages] = useState<HTMLImageElement[]>([]);
-  const [loadedFrames, setLoadedFrames] = useState(0);
+  const [isReady, setIsReady] = useState(false);
 
   // Directly transform scrollProgress, removing useSpring which causes double-smoothing lag 
-  // since Lenis is already providing smooth scrolling.
   const frameIndex = useTransform(scrollProgress, [0, 1], [0, TOTAL_FRAMES - 1]);
 
   // Preload Images
   useEffect(() => {
     let isCancelled = false;
-    const loadedImages: HTMLImageElement[] = [];
+    const imgArray: HTMLImageElement[] = [];
 
-    const preloadImages = async () => {
-      for (let i = 1; i <= TOTAL_FRAMES; i++) {
-        if (isCancelled) return;
-        const img = new Image();
-        img.src = getFramePath(i);
-        await new Promise((resolve) => {
-          img.onload = resolve;
-          img.onerror = resolve; // Continue even if one fails
-        });
-        loadedImages.push(img);
-        setLoadedFrames(i);
-      }
-      if (!isCancelled) {
-        setImages(loadedImages);
+    // Create empty image objects
+    for (let i = 1; i <= TOTAL_FRAMES; i++) {
+      imgArray.push(new Image());
+    }
+    
+    setImages(imgArray);
+
+    const loadImages = async () => {
+      // Await only the very first frame so we have something to show immediately
+      await new Promise<void>((resolve) => {
+        imgArray[0].onload = () => resolve();
+        imgArray[0].onerror = () => resolve();
+        imgArray[0].src = getFramePath(1);
+      });
+
+      if (isCancelled) return;
+      setIsReady(true); // Hide loading screen instantly after 1st frame!
+
+      // Trigger the rest of the images to load in the background
+      for (let i = 1; i < TOTAL_FRAMES; i++) {
+        if (isCancelled) break;
+        // Small delay every 10 frames to prevent freezing the main thread while assigning sources
+        if (i % 10 === 0) await new Promise(r => setTimeout(r, 10));
+        imgArray[i].src = getFramePath(i + 1);
       }
     };
 
-    preloadImages();
+    loadImages();
 
     return () => {
       isCancelled = true;
@@ -57,7 +66,7 @@ export default function CoffeeCanvas({ scrollProgress }: CoffeeCanvasProps) {
 
   // Canvas Drawing Logic
   useEffect(() => {
-    if (images.length === 0) return;
+    if (!isReady || images.length === 0) return;
 
     const container = containerRef.current;
     const canvas = canvasRef.current;
@@ -89,7 +98,18 @@ export default function CoffeeCanvas({ scrollProgress }: CoffeeCanvasProps) {
     updateSize();
 
     const drawFrame = (index: number) => {
-      const img = images[index];
+      let img = images[index];
+      
+      // If target frame isn't loaded yet, find the closest previous loaded frame
+      if (!img || !img.complete || img.naturalWidth === 0) {
+        for (let i = index - 1; i >= 0; i--) {
+          if (images[i] && images[i].complete && images[i].naturalWidth > 0) {
+            img = images[i];
+            break;
+          }
+        }
+      }
+
       if (!img || !img.complete) return;
 
       const imgWidth = img.naturalWidth || img.width;
@@ -136,16 +156,15 @@ export default function CoffeeCanvas({ scrollProgress }: CoffeeCanvasProps) {
       unsubscribe();
       resizeObserver.disconnect();
     };
-  }, [images, frameIndex]);
+  }, [isReady, images, frameIndex]);
 
   // Loading State
-  if (loadedFrames < TOTAL_FRAMES) {
-    const progress = Math.round((loadedFrames / TOTAL_FRAMES) * 100);
+  if (!isReady) {
     return (
       <div className="fixed inset-0 bg-[#050505] flex flex-col items-center justify-center text-[#D4A373] z-50">
         <Loader2 className="w-8 h-8 animate-spin mb-4" />
         <p className="font-sans text-sm tracking-widest uppercase">
-          Brewing Experience... {progress}%
+          Brewing Experience...
         </p>
       </div>
     );
