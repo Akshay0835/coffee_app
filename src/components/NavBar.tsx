@@ -41,9 +41,8 @@ export default function NavBar() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-700 border-b ${
-          scrolled || mobileMenuOpen ? "bg-[#050505]/80 backdrop-blur-xl border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)] py-4" : "bg-transparent border-transparent py-8"
-        }`}
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-700 border-b ${scrolled || mobileMenuOpen ? "bg-[#050505]/80 backdrop-blur-xl border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)] py-4" : "bg-transparent border-transparent py-8"
+          }`}
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
           {/* Logo */}
@@ -58,8 +57,8 @@ export default function NavBar() {
             {navLinks.map((link) => {
               const isActive = pathname === link.path;
               return (
-                <Link 
-                  key={link.name} 
+                <Link
+                  key={link.name}
                   href={link.path}
                   className="relative font-[family-name:var(--font-inter)] text-xs uppercase tracking-widest text-stone-400 hover:text-white transition-colors py-2"
                 >
@@ -77,7 +76,7 @@ export default function NavBar() {
           </nav>
 
           {/* Mobile Menu Toggle */}
-          <button 
+          <button
             className="md:hidden text-stone-400 hover:text-white transition-colors p-2 -mr-2 relative z-50"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
@@ -107,12 +106,11 @@ export default function NavBar() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.1 + 0.1 }}
                   >
-                    <Link 
+                    <Link
                       href={link.path}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`block font-[family-name:var(--font-playfair)] text-4xl tracking-widest transition-colors ${
-                        isActive ? "text-[#D4A373]" : "text-stone-300 hover:text-white"
-                      }`}
+                      className={`block font-[family-name:var(--font-playfair)] text-4xl tracking-widest transition-colors ${isActive ? "text-[#D4A373]" : "text-stone-300 hover:text-white"
+                        }`}
                     >
                       {link.name}
                     </Link>
@@ -120,8 +118,8 @@ export default function NavBar() {
                 );
               })}
             </nav>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
