@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import { useAnimationFrame } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
@@ -23,6 +24,14 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       lenisRef.current = null;
     };
   }, []);
+
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { immediate: true });
+    }
+  }, [pathname]);
 
   useAnimationFrame((time) => {
     if (lenisRef.current) {

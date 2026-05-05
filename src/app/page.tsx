@@ -4,6 +4,7 @@ import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import CoffeeCanvas from "@/components/CoffeeCanvas";
+import { ArrowRight } from "lucide-react";
 
 const products = [
   {
@@ -66,6 +67,12 @@ export default function Home() {
   const beatCOpacity = useTransform(experienceScrollY, [0.60, 0.65, 0.80, 0.85], [0, 1, 1, 0]);
   const beatDOpacity = useTransform(experienceScrollY, [0.90, 0.95, 1, 1], [0, 1, 1, 1]);
 
+  // Y transforms for each beat to create a drifting effect
+  const beatAY = useTransform(experienceScrollY, [0, 0.20], [50, -50]);
+  const beatBY = useTransform(experienceScrollY, [0.25, 0.55], [50, -50]);
+  const beatCY = useTransform(experienceScrollY, [0.60, 0.85], [50, -50]);
+  const beatDY = useTransform(experienceScrollY, [0.85, 1], [50, 0]);
+
   // Story scroll
   const storyContainerRef = useRef<HTMLElement>(null);
   const { scrollYProgress: storyScrollY } = useScroll({
@@ -104,7 +111,7 @@ export default function Home() {
 
           {/* BEAT A: The Origin */}
           <motion.div
-            style={{ opacity: beatAOpacity }}
+            style={{ opacity: beatAOpacity, y: beatAY }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-6"
           >
             <h2 className="font-[family-name:var(--font-playfair)] text-5xl md:text-7xl font-bold text-white mb-4 tracking-wide mix-blend-difference">
@@ -117,7 +124,7 @@ export default function Home() {
 
           {/* BEAT B: The Extraction */}
           <motion.div
-            style={{ opacity: beatBOpacity }}
+            style={{ opacity: beatBOpacity, y: beatBY }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-6"
           >
             <h2 className="font-[family-name:var(--font-playfair)] text-5xl md:text-7xl font-bold text-white mb-4 tracking-wide mix-blend-difference">
@@ -130,7 +137,7 @@ export default function Home() {
 
           {/* BEAT C: The Texture */}
           <motion.div
-            style={{ opacity: beatCOpacity }}
+            style={{ opacity: beatCOpacity, y: beatCY }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-6"
           >
             <h2 className="font-[family-name:var(--font-playfair)] text-5xl md:text-7xl font-bold text-white mb-4 tracking-wide mix-blend-difference">
@@ -143,15 +150,16 @@ export default function Home() {
 
           {/* BEAT D: The Moment */}
           <motion.div
-            style={{ opacity: beatDOpacity }}
+            style={{ opacity: beatDOpacity, y: beatDY }}
             className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-gradient-to-t from-[#050505] to-transparent via-[#050505]/80"
           >
             <div className="mt-auto mb-32 flex flex-col items-center">
               <h2 className="font-[family-name:var(--font-playfair)] text-6xl md:text-8xl font-bold text-white mb-6 tracking-wide drop-shadow-2xl">
                 SIP THE DARKNESS.
               </h2>
-              <a href="#story" className="relative overflow-hidden group pointer-events-auto px-10 py-5 bg-white/5 border border-white/20 text-white font-[family-name:var(--font-inter)] tracking-[0.2em] text-sm uppercase transition-all duration-700 backdrop-blur-md">
+              <a href="#story" className="relative overflow-hidden group pointer-events-auto px-10 py-5 bg-white/5 border border-white/20 text-white font-[family-name:var(--font-inter)] tracking-[0.2em] text-sm uppercase transition-all duration-700 backdrop-blur-md flex items-center gap-4 hover:border-[#D4A373]/50">
                 <span className="relative z-10 group-hover:text-[#050505] transition-colors duration-500">Discover Our Story</span>
+                <ArrowRight className="relative z-10 w-4 h-4 group-hover:translate-x-2 group-hover:text-[#050505] transition-transform duration-500" />
                 <div className="absolute inset-0 bg-[#D4A373] scale-y-0 origin-bottom group-hover:scale-y-100 transition-transform duration-500 ease-[cubic-bezier(0.19_1_0.22_1)] z-0" />
               </a>
             </div>
@@ -170,9 +178,15 @@ export default function Home() {
             transition={{ duration: 1, ease: "easeOut" }}
             className="max-w-4xl mx-auto"
           >
-            <h1 className="font-[family-name:var(--font-playfair)] text-5xl md:text-8xl font-bold mb-12 tracking-wide text-center">
+            <motion.h1 
+              initial={{ filter: "blur(10px)", opacity: 0, y: 20 }}
+              whileInView={{ filter: "blur(0px)", opacity: 1, y: 0 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+              viewport={{ once: true, margin: "-100px" }}
+              className="font-[family-name:var(--font-playfair)] text-5xl md:text-8xl font-bold mb-12 tracking-wide text-center bg-clip-text text-transparent bg-gradient-to-b from-white to-stone-500"
+            >
               OUR STORY
-            </h1>
+            </motion.h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mt-24 items-center">
               <motion.div style={{ y: storyY1 }}>
@@ -219,8 +233,9 @@ export default function Home() {
             <div className="mt-40 text-center border-t border-white/5 pt-20 relative">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-16 bg-gradient-to-b from-[#D4A373] to-transparent" />
               <h3 className="font-[family-name:var(--font-playfair)] text-5xl md:text-6xl text-white mb-10 tracking-wide">Ready to step into the dark?</h3>
-              <a href="#shop" className="relative overflow-hidden group inline-block px-12 py-5 border border-[#D4A373]/30 text-[#D4A373] hover:border-[#D4A373] hover:text-[#050505] font-[family-name:var(--font-inter)] text-xs uppercase tracking-[0.2em] transition-all duration-700">
+              <a href="#shop" className="relative overflow-hidden group inline-flex items-center gap-4 px-12 py-5 border border-[#D4A373]/30 text-[#D4A373] hover:border-[#D4A373] hover:text-[#050505] font-[family-name:var(--font-inter)] text-xs uppercase tracking-[0.2em] transition-all duration-700">
                 <span className="relative z-10">Explore the Collection</span>
+                <ArrowRight className="relative z-10 w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-[#D4A373] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19_1_0.22_1)] z-0" />
               </a>
             </div>
@@ -238,9 +253,15 @@ export default function Home() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="mb-20 text-center"
           >
-            <h1 className="font-[family-name:var(--font-playfair)] text-5xl md:text-7xl font-bold mb-6 tracking-wide">
+            <motion.h1 
+              initial={{ filter: "blur(10px)", opacity: 0, y: 20 }}
+              whileInView={{ filter: "blur(0px)", opacity: 1, y: 0 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+              viewport={{ once: true, margin: "-100px" }}
+              className="font-[family-name:var(--font-playfair)] text-5xl md:text-7xl font-bold mb-6 tracking-wide bg-clip-text text-transparent bg-gradient-to-b from-white to-stone-500"
+            >
               THE COLLECTION
-            </h1>
+            </motion.h1>
             <p className="font-[family-name:var(--font-inter)] text-stone-400 max-w-lg mx-auto tracking-widest uppercase text-sm">
               Precision-roasted small batches. Sourced from the world's most exclusive micro-lots.
             </p>
@@ -279,8 +300,9 @@ export default function Home() {
                       <p><span className="text-stone-700 mr-2">—</span>{product.origin}<span className="text-stone-700 ml-2">—</span></p>
                       <p className="text-[#D4A373]/70">{product.notes}</p>
                     </div>
-                    <button className="relative overflow-hidden group/btn px-10 py-4 border border-white/10 bg-white/5 backdrop-blur-md text-white font-[family-name:var(--font-inter)] text-xs uppercase tracking-[0.2em] transition-all duration-500 w-full md:w-auto">
+                    <button className="relative overflow-hidden group/btn px-10 py-4 border border-white/10 bg-white/5 backdrop-blur-md text-white font-[family-name:var(--font-inter)] text-xs uppercase tracking-[0.2em] transition-all duration-500 w-full md:w-auto flex items-center justify-center gap-4 hover:border-[#D4A373]/50">
                       <span className="relative z-10 group-hover/btn:text-[#050505] transition-colors duration-500">Add to Cart — {product.price}</span>
+                      <ArrowRight className="relative z-10 w-4 h-4 opacity-0 -translate-x-4 group-hover/btn:opacity-100 group-hover/btn:translate-x-0 group-hover/btn:text-[#050505] transition-all duration-500" />
                       <div className="absolute inset-0 bg-[#D4A373] scale-x-0 origin-left group-hover/btn:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.19_1_0.22_1)] z-0" />
                     </button>
                   </div>
@@ -293,8 +315,9 @@ export default function Home() {
           <div className="mt-40 text-center border-t border-white/5 pt-20 relative">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-16 bg-gradient-to-b from-[#D4A373] to-transparent" />
             <h3 className="font-[family-name:var(--font-playfair)] text-4xl md:text-5xl text-white mb-10 tracking-wide">Seeking a private reserve?</h3>
-            <a href="/contact" className="relative overflow-hidden group inline-block px-12 py-5 border border-[#D4A373]/30 text-[#D4A373] hover:border-[#D4A373] hover:text-[#050505] font-[family-name:var(--font-inter)] text-xs uppercase tracking-[0.2em] transition-all duration-700">
+            <a href="/contact" className="relative overflow-hidden group inline-flex items-center gap-4 px-12 py-5 border border-[#D4A373]/30 text-[#D4A373] hover:border-[#D4A373] hover:text-[#050505] font-[family-name:var(--font-inter)] text-xs uppercase tracking-[0.2em] transition-all duration-700">
               <span className="relative z-10">Contact the Roastery</span>
+              <ArrowRight className="relative z-10 w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
               <div className="absolute inset-0 bg-[#D4A373] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19_1_0.22_1)] z-0" />
             </a>
           </div>

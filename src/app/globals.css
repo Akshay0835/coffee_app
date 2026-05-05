@@ -12,6 +12,8 @@
 
 body {
   background-color: var(--background);
+  background-image: radial-gradient(circle at 50% 0%, rgba(212,163,115,0.08) 0%, rgba(5,5,5,1) 50%);
+  background-attachment: fixed;
   color: var(--foreground);
   overflow-x: hidden;
   /* Improve font rendering for dark mode */
@@ -32,17 +34,18 @@ body {
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #444; 
+  background: #050505; 
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-coffee-gold); 
-  border-radius: 10px;
+  background: rgba(212, 163, 115, 0.5); 
+  border-radius: 4px;
+  transition: background 0.3s ease;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #c39262; 
+  background: rgba(212, 163, 115, 1); 
 }
 
 /* Subtle Film Grain Overlay */

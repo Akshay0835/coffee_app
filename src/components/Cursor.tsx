@@ -63,7 +63,7 @@ export default function Cursor() {
   return (
     <>
       <motion.div
-        className="fixed top-0 left-0 w-3 h-3 bg-[#D4A373] rounded-full pointer-events-none z-[9999]"
+        className="fixed top-0 left-0 w-3 h-3 bg-white rounded-full pointer-events-none z-[9999] mix-blend-difference"
         style={{
           x: smoothX,
           y: smoothY,
@@ -71,13 +71,13 @@ export default function Cursor() {
           translateY: "-50%",
         }}
         animate={{
-          scale: clicked ? 0.5 : linkHovered ? 2.5 : 1,
-          opacity: linkHovered ? 0.5 : 1,
+          scale: clicked ? 0.5 : linkHovered ? 4 : 1,
+          opacity: linkHovered ? 1 : 1,
         }}
         transition={{ type: "spring", stiffness: 500, damping: 28, mass: 0.5 }}
       />
       <motion.div
-        className="fixed top-0 left-0 w-10 h-10 border border-[#D4A373]/50 rounded-full pointer-events-none z-[9998]"
+        className="fixed top-0 left-0 w-10 h-10 border border-white/30 rounded-full pointer-events-none z-[9998] mix-blend-difference"
         style={{
           x: smoothXOuter,
           y: smoothYOuter,
@@ -85,7 +85,7 @@ export default function Cursor() {
           translateY: "-50%",
         }}
         animate={{
-          scale: clicked ? 0.9 : linkHovered ? 1.5 : 1,
+          scale: clicked ? 0.9 : linkHovered ? 0 : 1,
           opacity: linkHovered ? 0 : 1,
         }}
         transition={{ type: "spring", stiffness: 100, damping: 20, mass: 0.8 }}

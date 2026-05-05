@@ -19,6 +19,11 @@ export default function NavBar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Close mobile menu on route change to prevent locked scrolling
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
   // Prevent scrolling when mobile menu is open
   useEffect(() => {
     if (mobileMenuOpen) {
@@ -47,8 +52,8 @@ export default function NavBar() {
 
           {/* Logo */}
           <Link href="/" className="group flex items-center gap-3 pl-4 shrink-0" onClick={() => setMobileMenuOpen(false)}>
-            <div className="w-1.5 h-1.5 rounded-full bg-[#D4A373] group-hover:scale-150 group-hover:shadow-[0_0_10px_rgba(212,163,115,0.5)] transition-all duration-500" />
-            <h1 className="font-[family-name:var(--font-playfair)] text-lg md:text-xl font-bold tracking-[0.3em] text-white transition-colors">
+            <div className="w-1.5 h-1.5 rounded-full bg-[#D4A373] group-hover:scale-150 group-hover:shadow-[0_0_10px_rgba(212,163,115,0.8)] transition-all duration-500" />
+            <h1 className="font-[family-name:var(--font-playfair)] text-lg md:text-xl font-bold tracking-[0.3em] text-white transition-all duration-500 group-hover:text-[#D4A373] group-hover:drop-shadow-[0_0_8px_rgba(212,163,115,0.4)]">
               THE VOID
             </h1>
           </Link>
